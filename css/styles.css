@@ -10,35 +10,27 @@ body {
     display: inline-block;
     position: relative;
     background-size: cover;
-    background-repeat: no-repeat;
     background-position: 50%;
     margin: 1px 3px;
     cursor: pointer;
-
+    transition: 0.3s;
     width: -webkit-calc(12.5% - 6px);
     width:    -moz-calc(12.5% - 6px);
     width:         calc(12.5% - 6px);
-
-    transition: 0.3s;
 }
 
 .responsive:hover, .responsive:focus {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
 }
 
-.responsive:after {
+.responsive::after {
     content: '';
     display: block;
     margin-top: 100%;
 }
 
-.responsive .title, .responsive .photographer {
-    opacity: 0;
-    transition: visibility 0s, opacity 0.3s linear;
-}
-
-.responsive:hover .title, .responsive:hover .photographer,
-.responsive:focus .title, .responsive:focus .photographer,
+.responsive:hover .grid-title, .responsive:hover .photographer,
+.responsive:focus .grid-title, .responsive:focus .photographer,
 .photographer:focus {
     opacity: 1;
 }
@@ -48,36 +40,36 @@ body {
     outline: none;
 }
 
-.title, .photographer {
+.grid-title, .photographer {
+    position: absolute;
     color: white;
     background-color: rgba(0, 0, 0, 0.7);
-    padding-left: 6px;
-    padding-right: 6px;
-    /* Behövdes för att kompensera */
-    width: -webkit-calc(100% - 12px);
-    width:    -moz-calc(100% - 12px);
-    width:         calc(100% - 12px);
+    padding-left: 12px;
+    padding-right: 12px;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s linear;
+    width: -webkit-calc(100% - 24px); /* Adjusting for padding */
+    width:    -moz-calc(100% - 24px);
+    width:         calc(100% - 24px);
 }
 
-.title {
+.grid-title {
     font-size: 16px;
-    position: absolute;
     font-weight: bold;
     top: 0;
     left: 0;
-    padding-top: 6px;
-    padding-bottom: 20px;
+    padding-top: 8px;
+    padding-bottom: 24px;
     background: linear-gradient(rgba(0, 0, 0, 0.7) 28px, rgba(0, 0, 0, 0));
 }
 
 .photographer {
     font-size: 12px;
-    position: absolute;
     bottom: 0;
     right: 0;
     text-align: right;
-    padding-bottom: 6px;
     padding-top: 20px;
+    padding-bottom: 6px;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 24px, rgba(0, 0, 0, 0));
     text-decoration: none;
 }
@@ -119,9 +111,9 @@ body {
 #close {
     color: white;
     position: absolute;
-    top: 10px;
+    top: 34px;
     right: 25px;
-    font-size: 35px;
+    font-size: 32px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -161,8 +153,6 @@ body {
 #previous span, #next span {
     position: relative;
     opacity: 1;
-
-    /* To compensate for arrow size */
     top: -webkit-calc(50% - 10px);
     top:    -moz-calc(50% - 10px);
     top:         calc(50% - 10px);
@@ -182,11 +172,15 @@ body {
     outline: none;
 }
 
-#title-container {
+#fullscreen-title-container {
     text-align: center;
     background-color: black;
     padding: 2px 16px;
     color: white;
+}
+
+#fullscreen-title {
+    font-size: 16px;
 }
 
 /* Slow Loading Modal
@@ -199,14 +193,14 @@ body {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 #slow-load-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid #777;
     width: 60%;
     text-align: center;
 }
@@ -214,7 +208,7 @@ body {
 #slow-load-close {
     position: relative;
     float: right;
-    color: #aaaaaa;
+    color: #777;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
@@ -236,7 +230,8 @@ body {
 
 /* Media Queries
    ========================================================================== */
-@media only screen and (max-width: 1919px) {
+
+@media only screen and (max-width: 1919px) and (min-width: 1440px) {
     .responsive {
         width: -webkit-calc(16.66% - 6px);
         width:    -moz-calc(16.66% - 6px);
@@ -244,7 +239,7 @@ body {
     }
 }
 
-@media only screen and (max-width: 1439px) {
+@media only screen and (max-width: 1439px) and (min-width: 960px) {
     .responsive {
         width: -webkit-calc(25% - 6px);
         width:    -moz-calc(25% - 6px);
@@ -252,7 +247,7 @@ body {
     }
 }
 
-@media only screen and (max-width: 959px) {
+@media only screen and (max-width: 959px) and (min-width: 720px) {
     .responsive {
         width: -webkit-calc(33.33% - 6px);
         width:    -moz-calc(33.33% - 6px);
@@ -260,7 +255,7 @@ body {
     }
 }
 
-@media only screen and (max-width: 719px) {
+@media only screen and (max-width: 719px) and (min-width: 480px) {
     .responsive {
         width: -webkit-calc(50% - 6px);
         width:    -moz-calc(50% - 6px);
@@ -268,10 +263,66 @@ body {
     }
 }
 
-@media only screen and (max-width: 479px) {
+@media only screen and (max-width: 479px) and (min-width: 0px) {
     .responsive {
         width: -webkit-calc(100% - 6px);
         width:    -moz-calc(100% - 6px);
         width:         calc(100% - 6px);
+    }
+}
+
+/*  Common smartphone CSS resolutions:
+    Full HD no scaling, iPad, HD no scaling, Google Pixel etc., iPhone, Full HD w/ CSS scaling 3 */
+@media only screen and
+    (orientation: portrait) and
+    (device-width: 1080px), (device-width: 768px), (device-width: 720px),
+    (device-width: 411px), (device-width: 375px), (device-width: 360px) {
+    .responsive {
+        width: -webkit-calc(50% - 6px);
+        width:    -moz-calc(50% - 6px);
+        width:         calc(50% - 6px);
+    }
+
+    .grid-title {
+        font-size: 32px;
+        padding-bottom: 32px;
+        background: linear-gradient(rgba(0, 0, 0, 0.7) 44px, rgba(0, 0, 0, 0));
+    }
+
+    .photographer {
+        font-size: 24px;
+        padding-top: 32px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 40px, rgba(0, 0, 0, 0));
+    }
+
+    #fullscreen-container {
+        padding-top: 136px;
+    }
+
+    #close {
+        color: white;
+        position: absolute;
+        top: 32px;
+        right: 32px;
+        font-size: 72px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    #fullscreen-title {
+        font-size: 48px;
+    }
+
+    #previous, #next {
+        width: 60px;
+        padding: 16px;
+        font-size: 60px;
+        opacity: 1;
+    }
+
+    #previous span, #next span {
+        top: -webkit-calc(50% - 30px);
+        top:    -moz-calc(50% - 30px);
+        top:         calc(50% - 30px);
     }
 }

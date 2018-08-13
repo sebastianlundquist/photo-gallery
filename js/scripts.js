@@ -1,9 +1,6 @@
 (function () {
-    // TODO: Link to flickr
     // TODO: Fixa styling
-    // TODO: Mobilanpassning
     // TODO: Minifiering
-    // TODO: Gör styling mobile-first
 
     var currentPhotoIndex = 0;
     var photoCount = 0;
@@ -43,9 +40,9 @@
             }
             else {
                 photoCount = result.photos.photo.length;
-                generateFullscreenContainer();
                 updatePhotoInfo(result);
                 generatePhotoContainers(result);
+                generateFullscreenContainer();
                 addEventListeners();
             }
         }
@@ -56,7 +53,6 @@
     }
 
     function generateFullscreenContainer() {
-        // Create elements
         var fullscreenContainer = document.createElement("div");
         var closeButton = document.createElement("span");
         var fullscreenContent = document.createElement("div");
@@ -69,7 +65,6 @@
         var titleContainer = document.createElement("div");
         var title = document.createElement("p");
 
-        // Set attributes
         fullscreenContainer.setAttribute("id", "fullscreen-container");
         closeButton.setAttribute("id", "close");
         closeButton.setAttribute("tabindex", "0");
@@ -80,14 +75,13 @@
         previous.setAttribute("tabindex", "0");
         next.setAttribute("id", "next");
         next.setAttribute("tabindex", "0");
-        titleContainer.setAttribute("id", "title-container");
-        title.setAttribute("id", "title");
+        titleContainer.setAttribute("id", "fullscreen-title-container");
+        title.setAttribute("id", "fullscreen-title");
 
         closeButton.innerText = "\u00d7";   // Multiplication sign
         previousSpan.innerText = "\u276e";  // Left arrow
         nextSpan.innerText = "\u276f";      // Right arrow
 
-        // Build markup
         insertPoint.appendChild(fullscreenContainer);
         fullscreenContainer.appendChild(closeButton);
         fullscreenContainer.appendChild(fullscreenContent);
@@ -104,15 +98,14 @@
     function updatePhotoInfo(photoArray) {
         var i;
         for (i = 0; i < photoCount; i++) {
-            // Update URLs
             photoInfo.URLs.push("https://farm" +
                 photoArray.photos.photo[i].farm + ".staticflickr.com/" +
                 photoArray.photos.photo[i].server + "/" +
                 photoArray.photos.photo[i].id + "_" +
                 photoArray.photos.photo[i].secret + "_n.jpg");
-            // Update user IDs
+
             photoInfo.userIDs.push(photoArray.photos.photo[i].id);
-            // Update titles
+
             photoInfo.titles.push(photoArray.photos.photo[i].title);
         }
     }
@@ -123,8 +116,11 @@
         var titleSpan;
         var photographerLink;
         var photoGroup = document.createElement("div");
+
         photoGroup.setAttribute("id", "photo-group");
+
         insertPoint.appendChild(photoGroup);
+
         for (i = 0; i < photoCount; i++) {
             photoContainer = document.createElement("div");
             titleSpan = document.createElement("span");
@@ -134,7 +130,7 @@
             photoContainer.setAttribute("class", "responsive");
             photoContainer.setAttribute("tabindex", "0");
             photoContainer.setAttribute("style", "background-image: url('" + photoInfo.URLs[i] + "')");
-            titleSpan.setAttribute("class", "title");
+            titleSpan.setAttribute("class", "grid-title");
             photographerLink.setAttribute("class", "photographer");
             photographerLink.setAttribute("href", "https://www.flickr.com/people/" + photoArray.photos.photo[i].owner);
 
@@ -148,7 +144,7 @@
             else {
                 titleSpan.innerText = "No title";
             }
-            photographerLink.innerText = "\u00A9 user " + photoArray.photos.photo[i].owner;
+            photographerLink.innerText = "\u00A9 user " + photoArray.photos.photo[i].owner; // Copyright symbol
         }
     }
 
@@ -156,6 +152,7 @@
         var i;
         var j;
         var eventListeners = [];
+
         function createListener(index) {
             document.getElementById("div" + index).addEventListener("click", function () {
                 currentPhotoIndex = index;
@@ -167,7 +164,7 @@
                     openFullscreen(index);
                 }
             });
-            // We need to stop event propagation for the photographer links to prevent them from opening the fullscreen photo
+            // Stopping event propagation for the photographer links to prevent them from opening the fullscreen photo
             document.getElementsByClassName("photographer")[index].addEventListener("click", function (e) {
                 e.stopPropagation();
             });
@@ -182,27 +179,24 @@
             eventListeners[j]();
         }
 
-        // For mouse users
         document.getElementById("close").addEventListener("click", function () {
             closeFullscreen(currentPhotoIndex);
         });
-        document.getElementById("next").addEventListener("click", function () {
-            nextPhoto(1);
-        });
-        document.getElementById("previous").addEventListener("click", function () {
-            nextPhoto(-1);
-        });
-
-        // For keyboard users
         document.getElementById("close").addEventListener("keyup", function (e) {
             if (e.keyCode === 13) {
                 closeFullscreen(currentPhotoIndex);
             }
         });
+        document.getElementById("next").addEventListener("click", function () {
+            nextPhoto(1);
+        });
         document.getElementById("next").addEventListener("keyup", function (e) {
             if (e.keyCode === 13) {
                 nextPhoto(1);
             }
+        });
+        document.getElementById("previous").addEventListener("click", function () {
+            nextPhoto(-1);
         });
         document.getElementById("previous").addEventListener("keyup", function (e) {
             if (e.keyCode === 13) {
@@ -211,14 +205,15 @@
         });
     }
 
+    // Changes the URL to another resolution photo
     function modifyURL(URL, size) {
         return URL.replace("_n.", "_" + size + ".");
     }
 
     function openFullscreen(index) {
         var displayImage = document.getElementById("display-image");
-        var title = document.getElementById("title");
-        // Get a higher resolution photo
+        var title = document.getElementById("fullscreen-title");
+
         displayImage.setAttribute("src", modifyURL(photoInfo.URLs[index], "h"));
         if (photoInfo.titles[index] !== "") {
             displayImage.setAttribute("alt", photoInfo.titles[index]);
@@ -237,13 +232,14 @@
     function closeFullscreen(index) {
         document.getElementById("fullscreen-container").style.display = "none";
         document.getElementById("photo-group").style.display = "block";
-        document.getElementById("div" + index).focus(); // Move keyboard focus back to the photo that was expanded
+        // Move keyboard focus back to the photo that was expanded
+        document.getElementById("div" + index).focus();
     }
 
     function nextPhoto(step) {
         var displayImage = document.getElementById("display-image");
-        var title = document.getElementById("title");
-        // Only change index if it is within our boundaries
+        var title = document.getElementById("fullscreen-title");
+        // Change index if it is within our boundaries
         if (step === 1 && currentPhotoIndex < photoInfo.URLs.length - 1) currentPhotoIndex++;
         else if (step === -1 && currentPhotoIndex > 0) currentPhotoIndex--;
 
@@ -274,6 +270,7 @@
             errorHeader.innerText = err[0];
             errorDescription.innerText = err[1];
         }
+
         errorContainer.appendChild(errorHeader);
         errorContainer.appendChild(errorDescription);
         insertPoint.appendChild(errorContainer);
