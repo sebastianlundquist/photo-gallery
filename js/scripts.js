@@ -1,6 +1,4 @@
 (function () {
-    // TODO: Minifiering
-
     var currentPhotoIndex = 0;
     var photoCount = 0;
     var insertPoint = document.getElementById("gallery");
@@ -152,13 +150,14 @@
         var j;
         var eventListeners = [];
 
+        // Gallery event listeners
         function createListener(index) {
             document.getElementById("div" + index).addEventListener("click", function () {
                 currentPhotoIndex = index;
                 openFullscreen(index);
             });
             document.getElementById("div" + index).addEventListener("keyup", function (e) {
-                if (e.keyCode === 13) {
+                if (e.key === "Enter") {
                     currentPhotoIndex = index;
                     openFullscreen(index);
                 }
@@ -177,12 +176,34 @@
         for (j = 0; j < photoCount; j++) {
             eventListeners[j]();
         }
+        document.getElementById("photo-group").addEventListener("keyup", function (e) {
+            if (e.key === "ArrowLeft") {
+                currentPhotoIndex--;
+                document.getElementById("div" + (currentPhotoIndex)).focus();
+            }
+            if (e.key === "ArrowRight") {
+                currentPhotoIndex++;
+                document.getElementById("div" + (currentPhotoIndex)).focus();
+            }
+        });
 
+        // Fullscreen event listeners
+        document.getElementById("fullscreen-container").addEventListener("keyup", function (e) {
+            if (e.key === "ArrowLeft") {
+                nextPhoto(-1);
+            }
+            if (e.key === "ArrowRight") {
+                nextPhoto(1);
+            }
+            if (e.key === "Escape") {
+                closeFullscreen(currentPhotoIndex);
+            }
+        });
         document.getElementById("close").addEventListener("click", function () {
             closeFullscreen(currentPhotoIndex);
         });
         document.getElementById("close").addEventListener("keyup", function (e) {
-            if (e.keyCode === 13) {
+            if (e.key === "Enter") {
                 closeFullscreen(currentPhotoIndex);
             }
         });
@@ -190,7 +211,7 @@
             nextPhoto(1);
         });
         document.getElementById("next").addEventListener("keyup", function (e) {
-            if (e.keyCode === 13) {
+            if (e.key === "Enter") {
                 nextPhoto(1);
             }
         });
@@ -198,34 +219,13 @@
             nextPhoto(-1);
         });
         document.getElementById("previous").addEventListener("keyup", function (e) {
-            if (e.keyCode === 13) {
+            if (e.key === "Enter") {
                 nextPhoto(-1);
-            }
-        });
-        document.addEventListener("keyup", function (e) {
-            var fullscreenContainer = document.getElementById("fullscreen-container");
-            if (e.keyCode === 39) {
-                if (fullscreenContainer.style.display === "block") {
-                    nextPhoto(1);
-                }
-                if (fullscreenContainer.style.display !== "block" && currentPhotoIndex < photoCount-1) {
-                    currentPhotoIndex++;
-                    document.getElementById("div" + (currentPhotoIndex)).focus();
-                }
-            }
-            if (e.keyCode === 37) {
-                if (fullscreenContainer.style.display === "block") {
-                    nextPhoto(-1);
-                }
-                if (fullscreenContainer.style.display !== "block" && currentPhotoIndex > 0) {
-                    currentPhotoIndex--;
-                    document.getElementById("div" + (currentPhotoIndex)).focus();
-                }
             }
         });
     }
 
-    // Changes the URL to another resolution photo
+    // Changes the URL to link to the same photo but another resolution
     function modifyURL(URL, size) {
         return URL.replace("_n.", "_" + size + ".");
     }
