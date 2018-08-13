@@ -1,5 +1,4 @@
 (function () {
-    // TODO: Fixa styling
     // TODO: Minifiering
 
     var currentPhotoIndex = 0;
@@ -201,6 +200,27 @@
         document.getElementById("previous").addEventListener("keyup", function (e) {
             if (e.keyCode === 13) {
                 nextPhoto(-1);
+            }
+        });
+        document.addEventListener("keyup", function (e) {
+            var fullscreenContainer = document.getElementById("fullscreen-container");
+            if (e.keyCode === 39) {
+                if (fullscreenContainer.style.display === "block") {
+                    nextPhoto(1);
+                }
+                if (fullscreenContainer.style.display !== "block" && currentPhotoIndex < photoCount-1) {
+                    currentPhotoIndex++;
+                    document.getElementById("div" + (currentPhotoIndex)).focus();
+                }
+            }
+            if (e.keyCode === 37) {
+                if (fullscreenContainer.style.display === "block") {
+                    nextPhoto(-1);
+                }
+                if (fullscreenContainer.style.display !== "block" && currentPhotoIndex > 0) {
+                    currentPhotoIndex--;
+                    document.getElementById("div" + (currentPhotoIndex)).focus();
+                }
             }
         });
     }
