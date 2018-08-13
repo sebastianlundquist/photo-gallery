@@ -177,11 +177,11 @@
             eventListeners[j]();
         }
         document.getElementById("photo-group").addEventListener("keyup", function (e) {
-            if (e.key === "ArrowLeft") {
+            if (e.key === "ArrowLeft" && currentPhotoIndex > 0) {
                 currentPhotoIndex--;
                 document.getElementById("div" + (currentPhotoIndex)).focus();
             }
-            if (e.key === "ArrowRight") {
+            if (e.key === "ArrowRight"  && currentPhotoIndex < photoCount-1) {
                 currentPhotoIndex++;
                 document.getElementById("div" + (currentPhotoIndex)).focus();
             }
