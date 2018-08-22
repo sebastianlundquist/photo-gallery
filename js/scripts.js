@@ -79,7 +79,7 @@
             photographer = photoArray.photos.photo[i].owner;
             // Changed from element creation to innerHTML for performance and readability.
             photoGroup.innerHTML +=
-                "<div id='div" + i + "' class='responsive' tabindex='0' style='background-image: url('" + photoInfo.URLs[i] + "')'>\n" +
+                "<div id='div" + i + "' class='responsive' tabindex='0' style='background-image: url(" + photoInfo.URLs[i] + ")'>\n" +
                 "    <span class='grid-title'>" + photoTitle + "</span>\n" +
                 "    <a class='photographer' href='https://www.flickr.com/people/" + photographer + "'>&copy; user " + photographer + "</a>\n" +
                 "</div>";
@@ -122,7 +122,7 @@
                 currentPhotoIndex--;
                 document.getElementById("div" + (currentPhotoIndex)).focus();
             }
-            if (e.key === "ArrowRight"  && currentPhotoIndex < photoCount-1) {
+            if (e.key === "ArrowRight" && currentPhotoIndex < photoCount-1) {
                 currentPhotoIndex++;
                 document.getElementById("div" + (currentPhotoIndex)).focus();
             }
@@ -216,25 +216,21 @@
     }
 
     function errorHandler(err) {
-        var errorContainer = document.createElement("div");
-        var errorHeader = document.createElement("h1");
-        var errorDescription = document.createElement("p");
-
-        errorContainer.setAttribute("id", "error-container");
-        errorHeader.setAttribute("id", "error-header");
-        errorDescription.setAttribute("id", "error-message");
-
+        var errorHeader = "";
+        var errorDescription = "";
         if (err[1] === "Response failed.") {
-            errorHeader.innerText = err[1];
+            errorHeader = err[1];
         }
         else {
-            errorHeader.innerText = err[0];
-            errorDescription.innerText = err[1];
+            errorHeader = err[0];
+            errorDescription = err[1];
         }
 
-        errorContainer.appendChild(errorHeader);
-        errorContainer.appendChild(errorDescription);
-        insertPoint.appendChild(errorContainer);
+        insertPoint.innerHTML +=
+            "<div id='error-container'>\n" +
+            "    <h1 id='error-header'>" + errorHeader + "</h1>\n" +
+            "    <p id='error-message'>" + errorDescription + "</p>\n" +
+            "</div>";
     }
 
     getPhotoData(
