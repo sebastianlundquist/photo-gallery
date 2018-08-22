@@ -21,10 +21,6 @@
 
 /* Gallery Containers
    ========================================================================== */
-.photo-group {
-    font-size: 16px;
-}
-
 .responsive {
     /*  CSS variables break IE but were implemented on recommendation.
         Having fallbacks would defeat the purpose of the CSS variables so none were implemented. */
@@ -36,6 +32,7 @@
     margin: 3px;
     cursor: pointer;
     transition: 0.3s;
+    font-size: 16px;
     width: -webkit-calc(12.5% - var(--margin-compensation));
     width:    -moz-calc(12.5% - var(--margin-compensation));
     width:         calc(12.5% - var(--margin-compensation));

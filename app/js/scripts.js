@@ -8,32 +8,30 @@
         titles: []
     };
 
-    function getPhotoData(callback, text, page, count, lat, lon) {
-        let xhr = new XMLHttpRequest();
-        xhr.addEventListener("load", function (e) {
-            let obj = {};
-            if (e.target.status !== 200) {
-                errorHandler([404, "Server did not respond."]);
-            }
-            else {
-                obj = JSON.parse(e.target.response);
-                callback(obj);
-            }
+    function getPhotoData(text, page, count, lat, lon) {
+        return new Promise(function(resolve, reject) {
+            let xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", function (e) {
+                if (e.target.status !== 200) {
+                    reject([404, "Server did not respond."]);
+                }
+                else {
+                    resolve(JSON.parse(e.target.response));
+                }
+            });
+            xhr.open("GET", "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=91311f10dd01517346db22e505210863" +
+                "&text=" + text + "&lat=" + lat + "&lon=" + lon + "&radius=32&format=json&per_page=" + count + "&nojsoncallback=1&page=" + page);
+            xhr.send();
         });
-        xhr.open("GET", "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=91311f10dd01517346db22e505210863" +
-            "&text=" + text + "&lat=" + lat + "&lon=" + lon + "&radius=32&format=json&per_page=" + count + "&nojsoncallback=1&page=" + page);
-        xhr.send();
     }
 
-    function generateContent(result) {
+    function checkValidCall(result) {
         if (result.stat === "fail") {
             errorHandler([result.code, result.message]);
         }
         else {
             photoCount = result.photos.photo.length;
-            updatePhotoInfo(result);
-            generatePhotoContainers(result);
-            addEventListeners();
+            return result;
         }
     }
 
@@ -50,6 +48,7 @@
             // Update titles
             photoInfo.titles.push(photoArray.photos.photo[i].title);
         }
+        return photoArray;
     }
 
     function generatePhotoContainers(photoArray) {
@@ -203,11 +202,14 @@
     }
 
     getPhotoData(
-        generateContent,
         insertPoint.getAttribute("data-text"),
         insertPoint.getAttribute("data-page"),
         insertPoint.getAttribute("data-count"),
         insertPoint.getAttribute("data-lat"),
         insertPoint.getAttribute("data-lon")
-    );
+    )
+        .then(checkValidCall, errorHandler)
+        .then(updatePhotoInfo)
+        .then(generatePhotoContainers)
+        .then(addEventListeners);
 })();
