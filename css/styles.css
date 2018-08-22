@@ -1,7 +1,22 @@
-/* Sections
+/* 🐹
    ========================================================================== */
-body {
+.🐹 {
+    padding: 44px;
+    background: aliceblue;
+    color: #444;
+    text-align: center;
+    font-family: 'Parisienne', cursive;
+    font-size: 44px;
+}
+
+.🐹::after {
+    content: "Take care of the sense, and the sounds will take care of themselves."
+}
+
+.flickr-gallery {
     font-family: 'Roboto', sans-serif;
+    text-align: left;
+    font-size: 0;
 }
 
 /* Gallery Containers
@@ -14,7 +29,7 @@ body {
     position: relative;
     background-size: cover;
     background-position: 50%;
-    margin: 1px 3px;
+    margin: 3px;
     cursor: pointer;
     transition: 0.3s;
     width: -webkit-calc(12.5% - var(--margin-compensation));
