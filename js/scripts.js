@@ -14,7 +14,7 @@
             var obj = {};
             try {
                 if (e.target.status !== 200) {
-                    errorHandler([404, "Response failed."]);
+                    errorHandler([404, "Server did not respond."]);
                 }
                 else {
                     obj = JSON.parse(e.target.response);
@@ -216,20 +216,10 @@
     }
 
     function errorHandler(err) {
-        var errorHeader = "";
-        var errorDescription = "";
-        if (err[1] === "Response failed.") {
-            errorHeader = err[1];
-        }
-        else {
-            errorHeader = err[0];
-            errorDescription = err[1];
-        }
-
         insertPoint.innerHTML +=
             "<div id='error-container'>\n" +
-            "    <h1 id='error-header'>" + errorHeader + "</h1>\n" +
-            "    <p id='error-message'>" + errorDescription + "</p>\n" +
+            "    <h1 id='error-header'>" + err[0] + "</h1>\n" +
+            "    <p id='error-message'>" + err[1] + "</p>\n" +
             "</div>";
     }
 
