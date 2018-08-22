@@ -65,39 +65,24 @@
 
     function generatePhotoContainers(photoArray) {
         var i;
-        var photoContainer;
-        var titleSpan;
-        var photographerLink;
-        var photoGroup = document.createElement("div");
-
-        photoGroup.setAttribute("id", "photo-group");
-
-        insertPoint.appendChild(photoGroup);
+        var photoGroup = document.getElementById("photo-group");
+        var photoTitle = "";
+        var photographer = "";
 
         for (i = 0; i < photoCount; i++) {
-            photoContainer = document.createElement("div");
-            titleSpan = document.createElement("span");
-            photographerLink = document.createElement("a");
-
-            photoContainer.setAttribute("id", "div" + i);
-            photoContainer.setAttribute("class", "responsive");
-            photoContainer.setAttribute("tabindex", "0");
-            photoContainer.setAttribute("style", "background-image: url('" + photoInfo.URLs[i] + "')");
-            titleSpan.setAttribute("class", "grid-title");
-            photographerLink.setAttribute("class", "photographer");
-            photographerLink.setAttribute("href", "https://www.flickr.com/people/" + photoArray.photos.photo[i].owner);
-
-            photoGroup.appendChild(photoContainer);
-            photoContainer.appendChild(titleSpan);
-            photoContainer.appendChild(photographerLink);
-
             if (photoInfo.titles[i] !== "") {
-                titleSpan.innerText = photoInfo.titles[i];
+                photoTitle = photoInfo.titles[i];
             }
             else {
-                titleSpan.innerText = "No title";
+                photoTitle = "No title";
             }
-            photographerLink.innerText = "\u00A9 user " + photoArray.photos.photo[i].owner; // Copyright symbol
+            photographer = photoArray.photos.photo[i].owner;
+            // Changed from element creation to innerHTML for performance and readability.
+            photoGroup.innerHTML +=
+                "<div id='div" + i + "' class='responsive' tabindex='0' style='background-image: url('" + photoInfo.URLs[i] + "')'>\n" +
+                "    <span class='grid-title'>" + photoTitle + "</span>\n" +
+                "    <a class='photographer' href='https://www.flickr.com/people/" + photographer + "'>&copy; user " + photographer + "</a>\n" +
+                "</div>";
         }
     }
 
