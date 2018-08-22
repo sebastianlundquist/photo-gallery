@@ -49,8 +49,7 @@
     }
 
     function updatePhotoInfo(photoArray) {
-        let i;
-        for (i = 0; i < photoCount; i++) {
+        for (let i = 0; i < photoCount; i++) {
             photoInfo.URLs.push("https://farm" +
                 photoArray.photos.photo[i].farm + ".staticflickr.com/" +
                 photoArray.photos.photo[i].server + "/" +
@@ -64,12 +63,11 @@
     }
 
     function generatePhotoContainers(photoArray) {
-        let i;
         let photoGroup = document.getElementById("photo-group");
         let photoTitle = "";
         let photographer = "";
 
-        for (i = 0; i < photoCount; i++) {
+        for (let i = 0; i < photoCount; i++) {
             if (photoInfo.titles[i] !== "") {
                 photoTitle = photoInfo.titles[i];
             }
@@ -87,36 +85,26 @@
     }
 
     function addEventListeners() {
-        let i;
-        let j;
-        let eventListeners = [];
-
-        // Gallery event listeners
-        function createListener(index) {
-            document.getElementById("div" + index).addEventListener("click", function () {
-                currentPhotoIndex = index;
-                openFullscreen(index);
+        for (let i = 0; i < photoCount; i++) {
+            document.getElementById("div" + i).addEventListener("click", function () {
+                currentPhotoIndex = i;
+                openFullscreen(i);
             });
-            document.getElementById("div" + index).addEventListener("keyup", function (e) {
+            document.getElementById("div" + i).addEventListener("keyup", function (e) {
                 if (e.key === "Enter") {
-                    currentPhotoIndex = index;
-                    openFullscreen(index);
+                    currentPhotoIndex = i;
+                    openFullscreen(i);
                 }
             });
             // Stopping event propagation for the photographer links to prevent them from opening the fullscreen photo
-            document.getElementsByClassName("photographer")[index].addEventListener("click", function (e) {
+            document.getElementsByClassName("photographer")[i].addEventListener("click", function (e) {
                 e.stopPropagation();
             });
-            document.getElementsByClassName("photographer")[index].addEventListener("keyup", function (e) {
+            document.getElementsByClassName("photographer")[i].addEventListener("keyup", function (e) {
                 e.stopPropagation();
             });
         }
-        for (i = 0; i < photoCount; i++) {
-            eventListeners[i] = createListener.bind(this, i);
-        }
-        for (j = 0; j < photoCount; j++) {
-            eventListeners[j]();
-        }
+
         document.getElementById("photo-group").addEventListener("keyup", function (e) {
             if (e.key === "ArrowLeft" && currentPhotoIndex > 0) {
                 currentPhotoIndex--;
