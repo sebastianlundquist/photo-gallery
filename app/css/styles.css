@@ -21,6 +21,10 @@
 
 /* Gallery Containers
    ========================================================================== */
+.photo-group {
+    font-size: 16px;
+}
+
 .responsive {
     /*  CSS variables break IE but were implemented on recommendation.
         Having fallbacks would defeat the purpose of the CSS variables so none were implemented. */
@@ -73,7 +77,6 @@
 }
 
 .grid-title {
-    font-size: 16px;
     font-weight: bold;
     top: 0;
     left: 0;
@@ -106,6 +109,7 @@
     height: 100%;
     overflow: auto;
     background-color: black;
+    font-size: 16px;
     text-align: center;         /* Centers the content */
 }
 
@@ -195,10 +199,6 @@
     background-color: black;
     padding: 2px 16px;
     color: white;
-}
-
-#fullscreen-title {
-    font-size: 16px;
 }
 
 /* Slow Loading Modal

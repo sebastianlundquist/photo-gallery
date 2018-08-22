@@ -39,14 +39,15 @@
 
     function updatePhotoInfo(photoArray) {
         for (let i = 0; i < photoCount; i++) {
+            // Update URLs
             photoInfo.URLs.push("https://farm" +
                 photoArray.photos.photo[i].farm + ".staticflickr.com/" +
                 photoArray.photos.photo[i].server + "/" +
                 photoArray.photos.photo[i].id + "_" +
                 photoArray.photos.photo[i].secret + "_n.jpg");
-
+            // Update userIDs
             photoInfo.userIDs.push(photoArray.photos.photo[i].id);
-
+            // Update titles
             photoInfo.titles.push(photoArray.photos.photo[i].title);
         }
     }
