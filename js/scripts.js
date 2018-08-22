@@ -39,7 +39,6 @@
                 photoCount = result.photos.photo.length;
                 updatePhotoInfo(result);
                 generatePhotoContainers(result);
-                generateFullscreenContainer();
                 addEventListeners();
             }
         }
@@ -47,49 +46,6 @@
             console.log(err);
             errorHandler(err);
         }
-    }
-
-    function generateFullscreenContainer() {
-        var fullscreenContainer = document.createElement("div");
-        var closeButton = document.createElement("span");
-        var fullscreenContent = document.createElement("div");
-        var slide = document.createElement("div");
-        var displayImage = document.createElement("img");
-        var previous = document.createElement("a");
-        var previousSpan = document.createElement("span");
-        var next = document.createElement("a");
-        var nextSpan = document.createElement("span");
-        var titleContainer = document.createElement("div");
-        var title = document.createElement("p");
-
-        fullscreenContainer.setAttribute("id", "fullscreen-container");
-        closeButton.setAttribute("id", "close");
-        closeButton.setAttribute("tabindex", "0");
-        fullscreenContent.setAttribute("id", "fullscreen-content");
-        slide.setAttribute("id", "slide");
-        displayImage.setAttribute("id", "display-image");
-        previous.setAttribute("id", "previous");
-        previous.setAttribute("tabindex", "0");
-        next.setAttribute("id", "next");
-        next.setAttribute("tabindex", "0");
-        titleContainer.setAttribute("id", "fullscreen-title-container");
-        title.setAttribute("id", "fullscreen-title");
-
-        closeButton.innerText = "\u00d7";   // Multiplication sign
-        previousSpan.innerText = "\u276e";  // Left arrow
-        nextSpan.innerText = "\u276f";      // Right arrow
-
-        insertPoint.appendChild(fullscreenContainer);
-        fullscreenContainer.appendChild(closeButton);
-        fullscreenContainer.appendChild(fullscreenContent);
-        fullscreenContainer.appendChild(titleContainer);
-        fullscreenContent.appendChild(slide);
-        fullscreenContent.appendChild(previous);
-        fullscreenContent.appendChild(next);
-        slide.appendChild(displayImage);
-        titleContainer.appendChild(title);
-        previous.appendChild(previousSpan);
-        next.appendChild(nextSpan);
     }
 
     function updatePhotoInfo(photoArray) {

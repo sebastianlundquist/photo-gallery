@@ -10,7 +10,25 @@
 </head>
 <body>
 <main>
-    <div id="gallery" data-text="dog" data-page="1" data-count="24" data-lat="59.3294" data-lon="18.0686"></div>
+    <div id="gallery" data-text="dog" data-page="1" data-count="24" data-lat="59.3294" data-lon="18.0686">
+        <div id="fullscreen-container">
+            <span id="close" tabindex="0">&times;</span>
+            <div id="fullscreen-content">
+                <div id="slide">
+                    <img id="display-image">
+                </div>
+                <a id="previous" tabindex="0">
+                    <span>&#10094;</span>
+                </a>
+                <a id="next" tabindex="0">
+                    <span>&#10095;</span>
+                </a>
+            </div>
+            <div id="fullscreen-title-container">
+                <p id="fullscreen-title"></p>
+            </div>
+        </div>
+    </div>
 </main>
 <script src="js/scripts.min.js"></script>
 </body>
