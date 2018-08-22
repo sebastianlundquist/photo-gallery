@@ -1,32 +1,31 @@
+"use strict";
+
 (function () {
-    let currentPhotoIndex = 0;
-    let photoCount = 0;
-    let insertPoint = document.getElementById("gallery");
-    let photoInfo = {
+    var currentPhotoIndex = 0;
+    var photoCount = 0;
+    var insertPoint = document.getElementById("gallery");
+    var photoInfo = {
         userIDs: [],
         URLs: [],
         titles: []
     };
 
     function getPhotoData(callback, text, page, count, lat, lon) {
-        let xhr = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
         xhr.addEventListener("load", function (e) {
-            let obj = {};
+            var obj = {};
             try {
                 if (e.target.status !== 200) {
                     errorHandler([404, "Server did not respond."]);
-                }
-                else {
+                } else {
                     obj = JSON.parse(e.target.response);
                     callback(obj);
                 }
-            }
-            catch(err) {
+            } catch (err) {
                 errorHandler(err);
             }
         });
-        xhr.open("GET", "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=91311f10dd01517346db22e505210863" +
-            "&text=" + text + "&lat=" + lat + "&lon=" + lon + "&radius=32&format=json&per_page=" + count + "&nojsoncallback=1&page=" + page);
+        xhr.open("GET", "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=91311f10dd01517346db22e505210863" + "&text=" + text + "&lat=" + lat + "&lon=" + lon + "&radius=32&format=json&per_page=" + count + "&nojsoncallback=1&page=" + page);
         xhr.send();
     }
 
@@ -34,28 +33,22 @@
         try {
             if (result.stat === "fail") {
                 errorHandler([result.code, result.message]);
-            }
-            else {
+            } else {
                 photoCount = result.photos.photo.length;
                 updatePhotoInfo(result);
                 generatePhotoContainers(result);
                 addEventListeners();
             }
-        }
-        catch(err) {
+        } catch (err) {
             console.log(err);
             errorHandler(err);
         }
     }
 
     function updatePhotoInfo(photoArray) {
-        let i;
+        var i = void 0;
         for (i = 0; i < photoCount; i++) {
-            photoInfo.URLs.push("https://farm" +
-                photoArray.photos.photo[i].farm + ".staticflickr.com/" +
-                photoArray.photos.photo[i].server + "/" +
-                photoArray.photos.photo[i].id + "_" +
-                photoArray.photos.photo[i].secret + "_n.jpg");
+            photoInfo.URLs.push("https://farm" + photoArray.photos.photo[i].farm + ".staticflickr.com/" + photoArray.photos.photo[i].server + "/" + photoArray.photos.photo[i].id + "_" + photoArray.photos.photo[i].secret + "_n.jpg");
 
             photoInfo.userIDs.push(photoArray.photos.photo[i].id);
 
@@ -64,32 +57,27 @@
     }
 
     function generatePhotoContainers(photoArray) {
-        let i;
-        let photoGroup = document.getElementById("photo-group");
-        let photoTitle = "";
-        let photographer = "";
+        var i = void 0;
+        var photoGroup = document.getElementById("photo-group");
+        var photoTitle = "";
+        var photographer = "";
 
         for (i = 0; i < photoCount; i++) {
             if (photoInfo.titles[i] !== "") {
                 photoTitle = photoInfo.titles[i];
-            }
-            else {
+            } else {
                 photoTitle = "No title";
             }
             photographer = photoArray.photos.photo[i].owner;
             // Changed from element creation to innerHTML for performance and readability.
-            photoGroup.innerHTML +=
-                "<div id='div" + i + "' class='responsive' tabindex='0' style='background-image: url(" + photoInfo.URLs[i] + ")'>\n" +
-                "    <span class='grid-title'>" + photoTitle + "</span>\n" +
-                "    <a class='photographer' href='https://www.flickr.com/people/" + photographer + "'>&copy; user " + photographer + "</a>\n" +
-                "</div>";
+            photoGroup.innerHTML += "<div id='div" + i + "' class='responsive' tabindex='0' style='background-image: url(" + photoInfo.URLs[i] + ")'>\n" + "    <span class='grid-title'>" + photoTitle + "</span>\n" + "    <a class='photographer' href='https://www.flickr.com/people/" + photographer + "'>&copy; user " + photographer + "</a>\n" + "</div>";
         }
     }
 
     function addEventListeners() {
-        let i;
-        let j;
-        let eventListeners = [];
+        var i = void 0;
+        var j = void 0;
+        var eventListeners = [];
 
         // Gallery event listeners
         function createListener(index) {
@@ -120,11 +108,11 @@
         document.getElementById("photo-group").addEventListener("keyup", function (e) {
             if (e.key === "ArrowLeft" && currentPhotoIndex > 0) {
                 currentPhotoIndex--;
-                document.getElementById("div" + (currentPhotoIndex)).focus();
+                document.getElementById("div" + currentPhotoIndex).focus();
             }
-            if (e.key === "ArrowRight" && currentPhotoIndex < photoCount-1) {
+            if (e.key === "ArrowRight" && currentPhotoIndex < photoCount - 1) {
                 currentPhotoIndex++;
-                document.getElementById("div" + (currentPhotoIndex)).focus();
+                document.getElementById("div" + currentPhotoIndex).focus();
             }
         });
 
@@ -172,15 +160,14 @@
     }
 
     function openFullscreen(index) {
-        let displayImage = document.getElementById("display-image");
-        let title = document.getElementById("fullscreen-title");
+        var displayImage = document.getElementById("display-image");
+        var title = document.getElementById("fullscreen-title");
 
         displayImage.setAttribute("src", modifyURL(photoInfo.URLs[index], "h"));
         if (photoInfo.titles[index] !== "") {
             displayImage.setAttribute("alt", photoInfo.titles[index]);
             title.innerText = photoInfo.titles[index];
-        }
-        else {
+        } else {
             displayImage.setAttribute("alt", "");
             title.innerText = "No title";
         }
@@ -198,37 +185,24 @@
     }
 
     function nextPhoto(step) {
-        let displayImage = document.getElementById("display-image");
-        let title = document.getElementById("fullscreen-title");
+        var displayImage = document.getElementById("display-image");
+        var title = document.getElementById("fullscreen-title");
         // Change index if it is within our boundaries
-        if (step === 1 && currentPhotoIndex < photoInfo.URLs.length - 1) currentPhotoIndex++;
-        else if (step === -1 && currentPhotoIndex > 0) currentPhotoIndex--;
+        if (step === 1 && currentPhotoIndex < photoInfo.URLs.length - 1) currentPhotoIndex++;else if (step === -1 && currentPhotoIndex > 0) currentPhotoIndex--;
 
         displayImage.setAttribute("src", modifyURL(photoInfo.URLs[currentPhotoIndex], "h"));
         if (photoInfo.titles[currentPhotoIndex] !== "") {
             displayImage.setAttribute("alt", photoInfo.titles[currentPhotoIndex]);
             title.innerText = photoInfo.titles[currentPhotoIndex];
-        }
-        else {
+        } else {
             displayImage.setAttribute("alt", "");
             title.innerText = "No title";
         }
     }
 
     function errorHandler(err) {
-        insertPoint.innerHTML +=
-            "<div id='error-container'>\n" +
-            "    <h1 id='error-header'>" + err[0] + "</h1>\n" +
-            "    <p id='error-message'>" + err[1] + "</p>\n" +
-            "</div>";
+        insertPoint.innerHTML += "<div id='error-container'>\n" + "    <h1 id='error-header'>" + err[0] + "</h1>\n" + "    <p id='error-message'>" + err[1] + "</p>\n" + "</div>";
     }
 
-    getPhotoData(
-        generateContent,
-        insertPoint.getAttribute("data-text"),
-        insertPoint.getAttribute("data-page"),
-        insertPoint.getAttribute("data-count"),
-        insertPoint.getAttribute("data-lat"),
-        insertPoint.getAttribute("data-lon")
-    );
+    getPhotoData(generateContent, insertPoint.getAttribute("data-text"), insertPoint.getAttribute("data-page"), insertPoint.getAttribute("data-count"), insertPoint.getAttribute("data-lat"), insertPoint.getAttribute("data-lon"));
 })();
