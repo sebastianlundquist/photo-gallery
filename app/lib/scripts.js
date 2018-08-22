@@ -14,15 +14,11 @@
         var xhr = new XMLHttpRequest();
         xhr.addEventListener("load", function (e) {
             var obj = {};
-            try {
-                if (e.target.status !== 200) {
-                    errorHandler([404, "Server did not respond."]);
-                } else {
-                    obj = JSON.parse(e.target.response);
-                    callback(obj);
-                }
-            } catch (err) {
-                errorHandler(err);
+            if (e.target.status !== 200) {
+                errorHandler([404, "Server did not respond."]);
+            } else {
+                obj = JSON.parse(e.target.response);
+                callback(obj);
             }
         });
         xhr.open("GET", "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=91311f10dd01517346db22e505210863" + "&text=" + text + "&lat=" + lat + "&lon=" + lon + "&radius=32&format=json&per_page=" + count + "&nojsoncallback=1&page=" + page);
@@ -30,18 +26,13 @@
     }
 
     function generateContent(result) {
-        try {
-            if (result.stat === "fail") {
-                errorHandler([result.code, result.message]);
-            } else {
-                photoCount = result.photos.photo.length;
-                updatePhotoInfo(result);
-                generatePhotoContainers(result);
-                addEventListeners();
-            }
-        } catch (err) {
-            console.log(err);
-            errorHandler(err);
+        if (result.stat === "fail") {
+            errorHandler([result.code, result.message]);
+        } else {
+            photoCount = result.photos.photo.length;
+            updatePhotoInfo(result);
+            generatePhotoContainers(result);
+            addEventListeners();
         }
     }
 
@@ -93,10 +84,10 @@
             });
         };
 
+        // Gallery event listeners
         for (var i = 0; i < photoCount; i++) {
             _loop(i);
         }
-
         document.getElementById("photo-group").addEventListener("keyup", function (e) {
             if (e.key === "ArrowLeft" && currentPhotoIndex > 0) {
                 currentPhotoIndex--;
@@ -193,6 +184,7 @@
     }
 
     function errorHandler(err) {
+        document.body.classList.remove("🐹");
         insertPoint.innerHTML += "<div id='error-container'>\n" + "    <h1 id='error-header'>" + err[0] + "</h1>\n" + "    <p id='error-message'>" + err[1] + "</p>\n" + "</div>";
     }
 

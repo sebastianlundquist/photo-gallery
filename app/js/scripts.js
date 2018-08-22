@@ -12,17 +12,12 @@
         let xhr = new XMLHttpRequest();
         xhr.addEventListener("load", function (e) {
             let obj = {};
-            try {
-                if (e.target.status !== 200) {
-                    errorHandler([404, "Server did not respond."]);
-                }
-                else {
-                    obj = JSON.parse(e.target.response);
-                    callback(obj);
-                }
+            if (e.target.status !== 200) {
+                errorHandler([404, "Server did not respond."]);
             }
-            catch(err) {
-                errorHandler(err);
+            else {
+                obj = JSON.parse(e.target.response);
+                callback(obj);
             }
         });
         xhr.open("GET", "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=91311f10dd01517346db22e505210863" +
@@ -31,20 +26,14 @@
     }
 
     function generateContent(result) {
-        try {
-            if (result.stat === "fail") {
-                errorHandler([result.code, result.message]);
-            }
-            else {
-                photoCount = result.photos.photo.length;
-                updatePhotoInfo(result);
-                generatePhotoContainers(result);
-                addEventListeners();
-            }
+        if (result.stat === "fail") {
+            errorHandler([result.code, result.message]);
         }
-        catch(err) {
-            console.log(err);
-            errorHandler(err);
+        else {
+            photoCount = result.photos.photo.length;
+            updatePhotoInfo(result);
+            generatePhotoContainers(result);
+            addEventListeners();
         }
     }
 
@@ -85,6 +74,7 @@
     }
 
     function addEventListeners() {
+        // Gallery event listeners
         for (let i = 0; i < photoCount; i++) {
             document.getElementById("div" + i).addEventListener("click", function () {
                 currentPhotoIndex = i;
@@ -104,7 +94,6 @@
                 e.stopPropagation();
             });
         }
-
         document.getElementById("photo-group").addEventListener("keyup", function (e) {
             if (e.key === "ArrowLeft" && currentPhotoIndex > 0) {
                 currentPhotoIndex--;
@@ -204,6 +193,7 @@
     }
 
     function errorHandler(err) {
+        document.body.classList.remove("🐹");
         insertPoint.innerHTML +=
             "<div id='error-container'>\n" +
             "    <h1 id='error-header'>" + err[0] + "</h1>\n" +
