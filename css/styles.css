@@ -7,6 +7,9 @@ body {
 /* Gallery Containers
    ========================================================================== */
 .responsive {
+    /*  CSS variables break IE but were implemented on recommendation.
+        Having fallbacks would defeat the purpose of the CSS variables so none were implemented. */
+    --margin-compensation: 6px;
     display: inline-block;
     position: relative;
     background-size: cover;
@@ -14,9 +17,9 @@ body {
     margin: 1px 3px;
     cursor: pointer;
     transition: 0.3s;
-    width: -webkit-calc(12.5% - 6px);
-    width:    -moz-calc(12.5% - 6px);
-    width:         calc(12.5% - 6px);
+    width: -webkit-calc(12.5% - var(--margin-compensation));
+    width:    -moz-calc(12.5% - var(--margin-compensation));
+    width:         calc(12.5% - var(--margin-compensation));
 }
 
 .responsive:hover, .responsive:focus {
@@ -41,16 +44,17 @@ body {
 }
 
 .grid-title, .photographer {
+    --grid-padding: 12px;
     position: absolute;
     color: white;
     background-color: rgba(0, 0, 0, 0.7);
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: var(--grid-padding);
+    padding-right: var(--grid-padding);
     opacity: 0;
     transition: visibility 0s, opacity 0.3s linear;
-    width: -webkit-calc(100% - 24px); /* Adjusting for padding */
-    width:    -moz-calc(100% - 24px);
-    width:         calc(100% - 24px);
+    width: -webkit-calc(100% - 2 * var(--grid-padding)); /* Adjusting for padding */
+    width:    -moz-calc(100% - 2 * var(--grid-padding));
+    width:         calc(100% - 2 * var(--grid-padding));
 }
 
 .grid-title {
@@ -232,41 +236,41 @@ body {
 
 @media only screen and (max-width: 1919px) and (min-width: 1440px) {
     .responsive {
-        width: -webkit-calc(16.66% - 6px);
-        width:    -moz-calc(16.66% - 6px);
-        width:         calc(16.66% - 6px);
+        width: -webkit-calc(16.66% - var(--margin-compensation));
+        width:    -moz-calc(16.66% - var(--margin-compensation));
+        width:         calc(16.66% - var(--margin-compensation));
     }
 }
 
 @media only screen and (max-width: 1439px) and (min-width: 960px) {
     .responsive {
-        width: -webkit-calc(25% - 6px);
-        width:    -moz-calc(25% - 6px);
-        width:         calc(25% - 6px);
+        width: -webkit-calc(25% - var(--margin-compensation));
+        width:    -moz-calc(25% - var(--margin-compensation));
+        width:         calc(25% - var(--margin-compensation));
     }
 }
 
 @media only screen and (max-width: 959px) and (min-width: 720px) {
     .responsive {
-        width: -webkit-calc(33.33% - 6px);
-        width:    -moz-calc(33.33% - 6px);
-        width:         calc(33.33% - 6px);
+        width: -webkit-calc(33.33% - var(--margin-compensation));
+        width:    -moz-calc(33.33% - var(--margin-compensation));
+        width:         calc(33.33% - var(--margin-compensation));
     }
 }
 
 @media only screen and (max-width: 719px) and (min-width: 480px) {
     .responsive {
-        width: -webkit-calc(50% - 6px);
-        width:    -moz-calc(50% - 6px);
-        width:         calc(50% - 6px);
+        width: -webkit-calc(50% - var(--margin-compensation));
+        width:    -moz-calc(50% - var(--margin-compensation));
+        width:         calc(50% - var(--margin-compensation));
     }
 }
 
 @media only screen and (max-width: 479px) and (min-width: 0px) {
     .responsive {
-        width: -webkit-calc(100% - 6px);
-        width:    -moz-calc(100% - 6px);
-        width:         calc(100% - 6px);
+        width: -webkit-calc(100% - var(--margin-compensation));
+        width:    -moz-calc(100% - var(--margin-compensation));
+        width:         calc(100% - var(--margin-compensation));
     }
 }
 
@@ -277,9 +281,9 @@ body {
     (device-width: 1080px), (device-width: 768px), (device-width: 720px),
     (device-width: 411px), (device-width: 375px), (device-width: 360px) {
     .responsive {
-        width: -webkit-calc(50% - 6px);
-        width:    -moz-calc(50% - 6px);
-        width:         calc(50% - 6px);
+        width: -webkit-calc(50% - var(--margin-compensation));
+        width:    -moz-calc(50% - var(--margin-compensation));
+        width:         calc(50% - var(--margin-compensation));
     }
 
     .grid-title {
