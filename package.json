@@ -9,6 +9,7 @@
     "url": "git+https://github.com/cygni/cygni-rekrytering-frontend.git"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "http-server": "^0.9.0",
     "livereload": "^0.6.0",
     "npm-run-all": "^4.0.1"
