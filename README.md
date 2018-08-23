@@ -8,4 +8,4 @@
 3. `npm run watch` in a new terminal
 
 ## Compatibility
-Tested on Chrome 68, Firefox 61, Edge 14, IE 11
+Tested on Chrome 68, Firefox 61, Edge 14, IE 11 (should work on IE >= 9)
