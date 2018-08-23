@@ -21,7 +21,7 @@
     ]
   },
   "scripts": {
-    "server:livereload": "livereload /app/dist",
+    "server:livereload": "livereload ./app",
     "server:serve": "http-server ./app -p 8080",
     "prestart": "npm install",
     "watch": "npm-watch",
