@@ -86,7 +86,7 @@ function generatePhotoContainers(photoArray) {
         photographer = photoArray.photos.photo[i].owner;
         // Changed from element creation to innerHTML for performance and readability.
         photoGroup.innerHTML +=
-            `<div id=div${i} class='responsive' tabindex='0' style='background-image: url(${photoInfo.URLs[i]})'><span class='grid-title'>${photoTitle}</span><a class='photographer' href='https://www.flickr.com/people/${photographer}'>&copy; user ${photographer}</a></div>`;
+            `<div id='div${i}' class='responsive' tabindex='0' style='background-image: url(${photoInfo.URLs[i]})'><span class='grid-title'>${photoTitle}</span><a class='photographer' href='https://www.flickr.com/people/${photographer}'>&copy; user ${photographer}</a></div>`;
     }
 }
 
