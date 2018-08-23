@@ -18,12 +18,15 @@
     "server:livereload": "livereload ./app",
     "server:serve": "http-server ./app -p 8080",
     "prestart": "npm install",
-    "build": "node_modules/.bin/babel app/js --out-dir app/lib",
+    "build-dev": "webpack --mode development",
+    "build": "babel app/js --out-dir app/dist/ && webpack",
     "start": "npm-run-all --parallel server:*"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "babel-preset-minify": "^0.4.3"
+    "babel-preset-minify": "^0.4.3",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0"
   }
 }
