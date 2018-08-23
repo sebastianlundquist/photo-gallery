@@ -14,10 +14,17 @@
     "livereload": "^0.6.0",
     "npm-run-all": "^4.0.1"
   },
+  "watch": {
+    "build": [
+      "app/js/*.js",
+      "app/css/styles.css"
+    ]
+  },
   "scripts": {
-    "server:livereload": "livereload ./app",
+    "server:livereload": "livereload /app/dist",
     "server:serve": "http-server ./app -p 8080",
     "prestart": "npm install",
+    "watch": "npm-watch",
     "build": "babel app/js --out-dir app/dist/js && webpack && uglifycss app/css/normalize.css app/css/styles.css > app/dist/css/bundle.css",
     "start": "npm-run-all --parallel server:*"
   },
@@ -25,6 +32,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-es2015-ie": "^6.7.0",
     "babel-preset-minify": "^0.4.3",
+    "npm-watch": "^0.3.0",
     "uglifycss": "0.0.29",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0"
