@@ -121,9 +121,7 @@
 
 #display-image {
     max-width: 100%;
-    max-height: -webkit-calc(80vh - 100px);
-    max-height:    -moz-calc(80vh - 100px);
-    max-height:         calc(80vh - 100px);
+    max-height: calc(80vh - 100px);
     display: block;             /* For correct height calculation */
 }
 
@@ -171,9 +169,7 @@
 #previous span, #next span {
     position: relative;
     opacity: 1;
-    top: -webkit-calc(50% - 10px);
-    top:    -moz-calc(50% - 10px);
-    top:         calc(50% - 10px);
+    top: calc(50% - 10px);
 }
 
 #previous span {
@@ -329,8 +325,10 @@
     }
 
     #previous span, #next span {
-        top: -webkit-calc(50% - 30px);
-        top:    -moz-calc(50% - 30px);
-        top:         calc(50% - 30px);
+        top: calc(50% - 30px);
+    }
+
+    #slow-load-content, #slow-load-close {
+        font-size: 64px;
     }
 }
