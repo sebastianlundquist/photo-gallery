@@ -18,14 +18,14 @@
     "server:livereload": "livereload ./app",
     "server:serve": "http-server ./app -p 8080",
     "prestart": "npm install",
-    "build-dev": "webpack --mode development",
-    "build": "babel app/js --out-dir app/dist/ && webpack",
+    "build": "babel app/js --out-dir app/dist/js && webpack && uglifycss app/css/normalize.css app/css/styles.css > app/dist/css/bundle.css",
     "start": "npm-run-all --parallel server:*"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-es2015-ie": "^6.7.0",
     "babel-preset-minify": "^0.4.3",
+    "uglifycss": "0.0.29",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0"
   }

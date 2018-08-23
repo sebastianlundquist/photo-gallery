@@ -69,7 +69,7 @@
     opacity: 0;
     transition: visibility 0s, opacity 0.3s linear;
     width: calc(100% - 24px);   /* Fallback for IE compatibility, remove in future */
-    width: var(--grid-width);
+    width: calc(100% - 2 * var(--grid-padding));
 }
 
 .grid-title {

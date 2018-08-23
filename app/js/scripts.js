@@ -1,5 +1,6 @@
-// TODO: Fix babel polyfill
-// TODO: Figure out webpack
+// TODO: change concatenation to templating
+// TODO: change to arrow functions when applicable
+// TODO: potentially divide into several script files
 let currentPhotoIndex = 0;
 let photoCount = 0;
 let insertPoint = document.getElementById("gallery");
