@@ -1,6 +1,3 @@
-// TODO: change concatenation to templating
-// TODO: change to arrow functions when applicable
-// TODO: potentially divide into several script files
 let currentPhotoIndex = 0;
 let photoCount = 0;
 let insertPoint = document.getElementById("gallery");
@@ -10,10 +7,20 @@ let photoInfo = {
     titles: []
 };
 
+/**
+ * Gets photo data response from the flickr api, returns it it JSON format on resolve,
+ * or returns an error code and message on reject.
+ * @param text  - A search query for photos with a certain theme.
+ * @param page  - Which page number of the search results to request.
+ * @param count - The number of photos to request per page.
+ * @param lat   - The latitude for the area to search for photos.
+ * @param lon   - The longitude for the area to search for photos.
+ * @returns {Promise<any>}
+ */
 function getPhotoData(text, page, count, lat, lon) {
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
-        xhr.addEventListener("load", function (e) {
+        xhr.addEventListener("load", (e) => {
             if (e.target.status === 200) {
                 resolve(JSON.parse(e.target.response));
             }
@@ -21,30 +28,36 @@ function getPhotoData(text, page, count, lat, lon) {
                 reject([404, "Server did not respond."]);
             }
         });
-        xhr.open("GET", "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=91311f10dd01517346db22e505210863" +
-            "&text=" + text + "&lat=" + lat + "&lon=" + lon + "&radius=32&format=json&per_page=" + count + "&nojsoncallback=1&page=" + page);
+        xhr.open("GET", `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=91311f10dd01517346db22e505210863&text=${text}&lat=${lat}&lon=${lon}&radius=32&format=json&per_page=${count}&nojsoncallback=1&page=${page}`);
         xhr.send();
     });
 }
 
-function checkValidCall(result) {
-    if (result.stat === "fail") {
-        errorHandler([result.code, result.message]);
+/**
+ * Checks if the JSON data returned from the flickr api via getPhotoData is valid, stores the number of photos received
+ * for future use and passes on the data on success. Displays an error message on fail.
+ * @param photoArray    - The JSON data received from the flickr api via getPhotoData.
+ * @returns {*}
+ */
+function checkValidCall(photoArray) {
+    if (photoArray.stat === "fail") {
+        errorHandler([photoArray.code, photoArray.message]);
     }
     else {
-        photoCount = result.photos.photo.length;
-        return result;
+        photoCount = photoArray.photos.photo.length;
+        return photoArray;
     }
 }
 
+/**
+ * Stores information about the photos for future use by other functions and passes on the data.
+ * @param photoArray    - The validated JSON photo data from the flickr api.
+ * @returns {*}
+ */
 function updatePhotoInfo(photoArray) {
     for (let i = 0; i < photoCount; i++) {
         // Update URLs
-        photoInfo.URLs.push("https://farm" +
-            photoArray.photos.photo[i].farm + ".staticflickr.com/" +
-            photoArray.photos.photo[i].server + "/" +
-            photoArray.photos.photo[i].id + "_" +
-            photoArray.photos.photo[i].secret + "_n.jpg");
+        photoInfo.URLs.push(`https://farm${photoArray.photos.photo[i].farm}.staticflickr.com/${photoArray.photos.photo[i].server}/${photoArray.photos.photo[i].id}_${photoArray.photos.photo[i].secret}_n.jpg`);
         // Update userIDs
         photoInfo.userIDs.push(photoArray.photos.photo[i].id);
         // Update titles
@@ -53,6 +66,11 @@ function updatePhotoInfo(photoArray) {
     return photoArray;
 }
 
+/**
+ * Generates a container, a photo title and a link to the photographer's flickr page for every photo received from the
+ * flickr api.
+ * @param photoArray    - The validated JSON photo data from the flickr api.
+ */
 function generatePhotoContainers(photoArray) {
     let photoGroup = document.getElementById("photo-group");
     let photoTitle = "";
@@ -68,35 +86,35 @@ function generatePhotoContainers(photoArray) {
         photographer = photoArray.photos.photo[i].owner;
         // Changed from element creation to innerHTML for performance and readability.
         photoGroup.innerHTML +=
-            "<div id='div" + i + "' class='responsive' tabindex='0' style='background-image: url(" + photoInfo.URLs[i] + ")'>\n" +
-            "<span class='grid-title'>" + photoTitle + "</span>\n" +
-            "<a class='photographer' href='https://www.flickr.com/people/" + photographer + "'>&copy; user " + photographer + "</a>\n" +
-            "</div>";
+            `<div id=div${i} class='responsive' tabindex='0' style='background-image: url(${photoInfo.URLs[i]})'><span class='grid-title'>${photoTitle}</span><a class='photographer' href='https://www.flickr.com/people/${photographer}'>&copy; user ${photographer}</a></div>`;
     }
 }
 
+/**
+ * Adds all event listeners to the photo gallery as well as the fullscreen photo view.
+ */
 function addEventListeners() {
     // Gallery event listeners
     for (let i = 0; i < photoCount; i++) {
-        document.getElementById("div" + i).addEventListener("click", function () {
+        document.getElementById("div" + i).addEventListener("click", () => {
             currentPhotoIndex = i;
             openFullscreen(i);
         });
-        document.getElementById("div" + i).addEventListener("keyup", function (e) {
+        document.getElementById("div" + i).addEventListener("keyup", (e) => {
             if (e.key === "Enter") {
                 currentPhotoIndex = i;
                 openFullscreen(i);
             }
         });
         // Stopping event propagation for the photographer links to prevent them from opening the fullscreen photo
-        document.getElementsByClassName("photographer")[i].addEventListener("click", function (e) {
+        document.getElementsByClassName("photographer")[i].addEventListener("click", (e) => {
             e.stopPropagation();
         });
-        document.getElementsByClassName("photographer")[i].addEventListener("keyup", function (e) {
+        document.getElementsByClassName("photographer")[i].addEventListener("keyup", (e) => {
             e.stopPropagation();
         });
     }
-    document.getElementById("photo-group").addEventListener("keyup", function (e) {
+    document.getElementById("photo-group").addEventListener("keyup", (e) => {
         if (e.key === "ArrowLeft" && currentPhotoIndex > 0) {
             currentPhotoIndex--;
             document.getElementById("div" + (currentPhotoIndex)).focus();
@@ -108,7 +126,7 @@ function addEventListeners() {
     });
 
     // Fullscreen event listeners
-    document.getElementById("fullscreen-container").addEventListener("keyup", function (e) {
+    document.getElementById("fullscreen-container").addEventListener("keyup", (e) => {
         if (e.key === "ArrowLeft") {
             nextPhoto(-1);
         }
@@ -119,37 +137,48 @@ function addEventListeners() {
             closeFullscreen(currentPhotoIndex);
         }
     });
-    document.getElementById("close").addEventListener("click", function () {
+    document.getElementById("close").addEventListener("click", () => {
         closeFullscreen(currentPhotoIndex);
     });
-    document.getElementById("close").addEventListener("keyup", function (e) {
+    document.getElementById("close").addEventListener("keyup", (e) => {
         if (e.key === "Enter") {
             closeFullscreen(currentPhotoIndex);
         }
     });
-    document.getElementById("next").addEventListener("click", function () {
+    document.getElementById("next").addEventListener("click", () => {
         nextPhoto(1);
     });
-    document.getElementById("next").addEventListener("keyup", function (e) {
+    document.getElementById("next").addEventListener("keyup", (e) => {
         if (e.key === "Enter") {
             nextPhoto(1);
         }
     });
-    document.getElementById("previous").addEventListener("click", function () {
+    document.getElementById("previous").addEventListener("click", () => {
         nextPhoto(-1);
     });
-    document.getElementById("previous").addEventListener("keyup", function (e) {
+    document.getElementById("previous").addEventListener("keyup", (e) => {
         if (e.key === "Enter") {
             nextPhoto(-1);
         }
     });
 }
 
-// Changes the URL to link to the same photo but another resolution
+/**
+ * Modifies a flickr photo URL to the same photo in another resolution.
+ * @param URL   -   The URL to modify.
+ * @param size  -   The size suffix representing the desired photo resolution.
+ *                  Valid suffixes are 's', 'q', 't', 'm', 'n', 'z', 'c', 'b', 'h', 'k' and 'o'.
+ *                  See respective resolutions at https://www.flickr.com/services/api/misc.urls.html.
+ * @returns {void|string|*}
+ */
 function modifyURL(URL, size) {
     return URL.replace("_n.", "_" + size + ".");
 }
 
+/**
+ * Opens a selected photo in fullscreen view, with a higher resolution.
+ * @param index - The index of the photo to view.
+ */
 function openFullscreen(index) {
     let displayImage = document.getElementById("display-image");
     let title = document.getElementById("fullscreen-title");
@@ -169,6 +198,10 @@ function openFullscreen(index) {
     document.getElementById("photo-group").style.display = "none";
 }
 
+/**
+ * Closes the fullscreen view.
+ * @param index - The current photo index to retain correct keyboard focus after close.
+ */
 function closeFullscreen(index) {
     document.getElementById("fullscreen-container").style.display = "none";
     document.getElementById("photo-group").style.display = "block";
@@ -176,6 +209,10 @@ function closeFullscreen(index) {
     document.getElementById("div" + index).focus();
 }
 
+/**
+ * Cycles through photos in the fullscreen view.
+ * @param step  - 1 if we want to go to the next photo, or -1 if we want to go to the previous photo.
+ */
 function nextPhoto(step) {
     let displayImage = document.getElementById("display-image");
     let title = document.getElementById("fullscreen-title");
@@ -194,13 +231,14 @@ function nextPhoto(step) {
     }
 }
 
+/**
+ * Displays an error message.
+ * @param err   - An array with an error code [0] and an error message [1].
+ */
 function errorHandler(err) {
     document.body.classList.remove("🐹");
     insertPoint.innerHTML +=
-        "<div id='error-container'>\n" +
-        "<h1 id='error-header'>" + err[0] + "</h1>\n" +
-        "<p id='error-message'>" + err[1] + "</p>\n" +
-        "</div>";
+        `<div id='error-container'><h1 id='error-header'>${err[0]}</h1><p id='error-message'>${err[1]}</p></div>`;
 }
 
 getPhotoData(
