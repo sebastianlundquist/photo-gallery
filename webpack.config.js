@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./app/dist/scripts",
+    entry: ["core-js/fn/promise", "./app/dist/scripts"],
     output: {
         path: path.resolve(__dirname, "app/dist"),
         filename: "bundle.js"
